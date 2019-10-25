@@ -22,7 +22,7 @@ $ python3 -m venv env
 Every time you want to start the virtual environment
 ```
 on mac
-$ source env/Scripts/activate
+$ source env/bin/activate
 on windows
 $ source env/Scripts/activate
 ```
