@@ -44,7 +44,9 @@ os.environ['DONKEY_SIM_PATH'] = f"./donkey_sim.app/Contents/MacOS/donkey_sim"
 ```
 to:
 ```
-os.environ['DONKEY_SIM_PATH'] = f"./donkey_sim.exe"
+os.environ['DONKEY_SIM_PATH'] = f"./DonkeySimWindows/DonkeySim.exe"
+
+(make sure this is correct path to where the exe lives)
 ```
 Then:
 ```
