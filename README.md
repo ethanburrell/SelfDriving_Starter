@@ -5,12 +5,22 @@ Start small, and build up from there
 ## Step 1: Downloading:
 
 * please git clone this locally
+```bash
+git clone https://github.com/ethanburrell/SelfDriving_Starter
+```
 * also download the corresponding file to your machine, and unzip and place in this directory
   * https://github.com/tawnkramer/gym-donkeycar/releases
 
+for linux:
+```bash
+wget https://github.com/tawnkramer/gym-donkeycar/releases/download/v18.9/DonkeySimLinux.zip -O temp.zip;
+unzip temp.zip;
+rm temp.zip
+```
+
 ## Step 2: Creating a virtual environment
 
-Preq: please install python 3
+Preq: please install python3.7
 
 Q: Why do we use a virtual environment? We use it to install a lot of complex
 tools ontop of your system so we don't have to deal with version collisions.
@@ -21,7 +31,7 @@ $ python3 -m venv env
 ```
 Every time you want to start the virtual environment
 ```
-on mac
+on mac / linux
 $ source env/bin/activate
 on windows
 $ source env/Scripts/activate
@@ -32,22 +42,13 @@ You will notice that you will have a shell that now looks like:
 (env) My-Name: directory __
 ```
 
-#Step 3: install the Donkey Car Gym Package
+#Step 3: install dependencies
 
-* `pip install git+https://github.com/tawnkramer/gym-donkeycar.git`
+* `pip install -r requirements.txt`
 
 # Step 4: run the "drive straight example"
 
-* If you are on Windows change line 7 in drive_straight.py from
-```
-os.environ['DONKEY_SIM_PATH'] = f"./donkey_sim.app/Contents/MacOS/donkey_sim"
-```
-to:
-```
-os.environ['DONKEY_SIM_PATH'] = f"./DonkeySimWindows/DonkeySim.exe"
 
-(make sure this is correct path to where the exe lives)
-```
 Then:
 ```
 python3 drive_straight.py

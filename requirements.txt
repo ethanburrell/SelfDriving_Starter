@@ -1,0 +1,4 @@
+git+https://github.com/tawnkramer/gym-donkeycar.git
+python-dotenv
+keras
+tensorflow

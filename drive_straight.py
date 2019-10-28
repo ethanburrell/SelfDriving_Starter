@@ -1,21 +1,56 @@
-import os
 import gym
-import gym_donkeycar
 import numpy as np
+from setup import load_env
+from keras.models import Sequential
+from keras.layers import Dense, Conv2D, Flatten
+from pprint import PrettyPrinter
 
-#%% SET UP ENVIRONMENT
-os.environ['DONKEY_SIM_PATH'] = f"./donkey_sim.app/Contents/MacOS/donkey_sim"
-#"donkey_sim.app"
-#f"{PATH_TO_APP}/donkey_sim.app/Contents/MacOS/donkey_sim"
-os.environ['DONKEY_SIM_PORT'] = str(9091)
-os.environ['DONKEY_SIM_HEADLESS'] = str(0) # "1" is headless
+load_env()
 
-env = gym.make("donkey-warehouse-v0")
-#gym.make("donkey-generated-roads-v0")
+pp = PrettyPrinter()
 
-#%% PLAY
-obv = env.reset()
-for t in range(10000):
-    action = np.array([0.0,0.5]) # drive straight with small speed
-# execute the action
-    obv, reward, done, info = env.step(action)
+def drive_straight():
+    env = gym.make("donkey-warehouse-v0")
+    # gym.make("donkey-generated-roads-v0")
+
+    #%% PLAY
+    obv = env.reset()
+    for t in range(10000):
+        action = np.array([0.0,0.5]) # drive straight with small speed
+    # execute the action
+        obv, reward, done, info = env.step(action)
+
+def cnn():
+    # totally random wtf init
+    # this is a template to use on the Q learning method
+    x_train = x_test = np.random.random((1000, 28, 28, 1)) # much overfitting xD
+    y_train = y_test = np.random.randint(2, size=(1000, 1))
+
+    model = Sequential()
+    model.add(Conv2D(64, kernel_size=3, activation="relu", input_shape=(28, 28, 1)))
+    model.add(Conv2D(32, kernel_size=3, activation="relu"))
+    print(model.output_shape)
+    model.add(Flatten())
+    print(model.output_shape)
+    model.add(Dense(1, activation="softmax", input_shape=(18432,)))
+
+    model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+
+    # Train the model, iterating on the data in batches of 32 samples
+    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=10, batch_size=32)
+
+    score = model.evaluate(x_test, y_test, batch_size=128)
+    print(f"Score: {score}")
+
+    #predict first 4 data points in the test set
+    print("Prediction:")
+    pp.pprint(model.predict(x_test[:4]))
+
+    #actual results for first data points in test set
+    print("vs reality:")
+    pp.pprint(y_test[:4])
+
+#drive_straight()
+cnn()
