@@ -4,6 +4,7 @@ from setup import load_env
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten
 from pprint import PrettyPrinter
+import random
 
 load_env()
 
@@ -19,6 +20,25 @@ def drive_straight():
         action = np.array([0.0,0.5]) # drive straight with small speed
     # execute the action
         obv, reward, done, info = env.step(action)
+
+def drive_with_prediction():
+    env = gym.make("donkey-warehouse-v0")
+    obv = env.reset()
+    for t in range(1000):
+        action = get_action(env)
+        obv, reward, done, info = env.step(action)
+
+
+# gets an action given the environment.
+
+def get_action(env):
+    epsilon = 0.2 #probability that we will pick a random action rather than the best one.
+    if random.uniform(0, 1) < epsilon: 
+        return env.action_space.sample()
+    else:
+        #Get the actual action!
+        return env.action_space.high
+    
 
 def cnn():
     # totally random wtf init
