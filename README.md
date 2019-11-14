@@ -2,7 +2,14 @@
 
 Start small, and build up from there
 
-## Step 1: Downloading:
+## Step 0: clone submodule
+
+Do:
+```
+git submodule update --init
+```
+
+## Step 1: Downloading
 
 * please git clone this locally
 ```bash
