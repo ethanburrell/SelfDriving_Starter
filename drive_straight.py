@@ -8,6 +8,13 @@ import random
 import gym_donkeycar # Registers the environment
 import cv2
 from matplotlib import pyplot as plt
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Activation, Flatten
+from tensorflow.keras.optimizers import Adam
+
+from rl.agents.dqn import DQNAgent
+from rl.policy import EpsGreedyQPolicy
+from rl.memory import SequentialMemory
 
 load_env()
 
@@ -31,6 +38,38 @@ def drive_straight():
         edges = cv2.Canny(obv, 100, 200)
         plt.imshow(edges)
         plt.show()
+
+def rl():
+    env = gym.make("donkey-warehouse-v0")
+    np.random.seed(123)
+    env.seed(123)
+    shape = env.action_space.shape
+    print(f"Action space shape: {shape}, low:{env.action_space.low}, high:{env.action_space.high}")
+    # Action space shape: (2,), low:[-1.  0.], high:[1. 5.]
+    nb_actions = shape[0]
+    if len(shape) > 1:
+        nb_actions *= shape[1]
+    print(f"Number of actions: {nb_actions}")
+
+    model = Sequential()
+    model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
+    model.add(Dense(16))
+    model.add(Activation('relu'))
+    model.add(Dense(nb_actions))
+    model.add(Activation('linear'))
+    print(model.summary())
+
+    policy = EpsGreedyQPolicy()
+    memory = SequentialMemory(limit=50000, window_length=1)
+    dqn = DQNAgent(model=model, nb_actions=nb_actions, memory=memory, nb_steps_warmup=10,
+                   target_model_update=1e-2, policy=policy)
+    dqn.compile(Adam(lr=1e-3), metrics=['mae'])
+
+    # Okay, now it's time to learn something! We visualize the training here for show, but this slows down training quite a lot.
+    dqn.fit(env, nb_steps=5000, visualize=True, verbose=2)
+
+    dqn.test(env, nb_episodes=5, visualize=True)
+    # Fails because the action returned to the environment is a scalar instead of being a tuple throttle / angle
 
 def drive_with_prediction():
     env = gym.make("donkey-warehouse-v0")
@@ -98,6 +137,7 @@ def image_processing():
 
     plt.show()
 
-drive_straight()
+# drive_straight()
 # cnn()
 # image_processing()
+rl()
