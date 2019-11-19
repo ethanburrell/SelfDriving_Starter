@@ -18,3 +18,5 @@ def load_env():
         else:
             raise ValueError("Unknown operating")
 
+    print(f"Set DONKEY_SIM_PATH to {os.environ.get('DONKEY_SIM_PATH')}")
+

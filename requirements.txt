@@ -2,3 +2,7 @@ git+https://github.com/tawnkramer/gym-donkeycar.git
 python-dotenv
 keras
 tensorflow
+
+# Image processing submodule:
+matplotlib
+opencv-python

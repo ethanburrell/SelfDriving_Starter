@@ -20,6 +20,8 @@ def drive_straight():
         action = np.array([0.0,0.5]) # drive straight with small speed
     # execute the action
         obv, reward, done, info = env.step(action)
+        print(obv)
+        print(len(obv))
 
 def drive_with_prediction():
     env = gym.make("donkey-warehouse-v0")
@@ -72,5 +74,5 @@ def cnn():
     print("vs reality:")
     pp.pprint(y_test[:4])
 
-#drive_straight()
-cnn()
+drive_straight()
+#cnn()
