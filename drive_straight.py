@@ -6,6 +6,8 @@ from keras.layers import Dense, Conv2D, Flatten
 from pprint import PrettyPrinter
 import random
 import gym_donkeycar # Registers the environment
+import cv2
+from matplotlib import pyplot as plt
 
 load_env()
 
@@ -25,6 +27,10 @@ def drive_straight():
         # reward: 1.001323546455871
         # info: {'pos': (49.99929, 0.7416418, 49.99545), 'cte': -0.000402563, 'speed': 0.02170224, 'hit': 'none'}
         # done: False
+
+        edges = cv2.Canny(obv, 100, 200)
+        plt.imshow(edges)
+        plt.show()
 
 def drive_with_prediction():
     env = gym.make("donkey-warehouse-v0")
@@ -77,5 +83,21 @@ def cnn():
     print("vs reality:")
     pp.pprint(y_test[:4])
 
+def image_processing():
+    from imaging.ethan_burrell.edge import detect_edge
+
+    images = detect_edge("./imaging/ethan_burrell/images/frame_000186_ttl_0_agl_-0.06721038_mil_0.0.jpg")
+
+    fig, axs = plt.subplots(nrows=5, ncols=2, figsize=(5, 5))
+    for ind, p in enumerate(images):
+        ax = axs[ind // 2, ind % 2]
+        ax.set_title(p[0])
+        ax.imshow(p[1])
+
+    plt.show()
+
+    plt.show()
+
 drive_straight()
-#cnn()
+# cnn()
+# image_processing()
