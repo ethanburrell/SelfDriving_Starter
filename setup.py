@@ -19,4 +19,6 @@ def load_env():
             raise ValueError("Unknown operating")
 
     print(f"Set DONKEY_SIM_PATH to {os.environ.get('DONKEY_SIM_PATH')}")
+    print(f"Set DONKEY_SIM_PORT to {os.environ.get('DONKEY_SIM_PORT')}")
+    print(f"Set DONKEY_SIM_HEADLESS to {os.environ.get('DONKEY_SIM_HEADLESS')}")
 

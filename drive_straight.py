@@ -5,6 +5,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Flatten
 from pprint import PrettyPrinter
 import random
+import gym_donkeycar # Registers the environment
 
 load_env()
 
@@ -20,8 +21,10 @@ def drive_straight():
         action = np.array([0.0,0.5]) # drive straight with small speed
     # execute the action
         obv, reward, done, info = env.step(action)
-        print(obv)
-        print(len(obv))
+        # obv: 120x160 matrix
+        # reward: 1.001323546455871
+        # info: {'pos': (49.99929, 0.7416418, 49.99545), 'cte': -0.000402563, 'speed': 0.02170224, 'hit': 'none'}
+        # done: False
 
 def drive_with_prediction():
     env = gym.make("donkey-warehouse-v0")
