@@ -8,13 +8,14 @@ import random
 import gym_donkeycar # Registers the environment
 import cv2
 from matplotlib import pyplot as plt
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Activation, Flatten
-from tensorflow.keras.optimizers import Adam
 
 from rl.agents.dqn import DQNAgent
 from rl.policy import EpsGreedyQPolicy
 from rl.memory import SequentialMemory
+
+from tensorflow.keras.optimizers import Adam
+
+from keras_modal import get_model
 
 load_env()
 
@@ -51,13 +52,7 @@ def rl():
         nb_actions *= shape[1]
     print(f"Number of actions: {nb_actions}")
 
-    model = Sequential()
-    model.add(Flatten(input_shape=(1,) + env.observation_space.shape))
-    model.add(Dense(16))
-    model.add(Activation('relu'))
-    model.add(Dense(nb_actions))
-    model.add(Activation('linear'))
-    print(model.summary())
+    model = get_model((1,) + env.observation_space.shape, nb_actions)
 
     policy = EpsGreedyQPolicy()
     memory = SequentialMemory(limit=50000, window_length=1)
