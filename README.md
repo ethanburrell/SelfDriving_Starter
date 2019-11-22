@@ -55,6 +55,7 @@ https://github.com/tawnkramer/gym-donkeycar/tree/master/examples
 Download program for your computer:
 https://github.com/tawnkramer/gym-donkeycar/releases
 
+```
 import os
 import gym
 import gym_donkeycar
@@ -73,3 +74,5 @@ for t in range(100):
     action = np.array([0.0,0.5]) # drive straight with small speed
 # execute the action
 obv, reward, done, info = env.step(action)
+
+```
