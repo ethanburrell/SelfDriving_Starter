@@ -34,7 +34,7 @@ def make(env_str, cpu):
     def make_helper():
         env = gym.make(env_str)
         env.seed(cpu)
-        env = Monitor(env, "models" + str(cpu) + "/", allow_early_resets=False)
+        env = Monitor(env, "models" + str(cpu) + "/", allow_early_resets=True)
         env.reset()
         return env
     return make_helper
@@ -49,7 +49,7 @@ os.environ['DONKEY_SIM_MULTI'] = str(1)
 timesteps = 100000 # Set this to a reasonable number
 model_name = "a2c_model" # Change the model name to your preferences
 training = True # Change this to test or use the model
-
+os.makedirs("models/", exist_ok=True)
 for cpu in range(num_cpu):
     os.makedirs("models" + str(cpu) + "/", exist_ok=True)
 
