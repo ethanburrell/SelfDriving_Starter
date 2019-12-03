@@ -10,7 +10,7 @@ from stable_baselines import A2C, PPO2
 
 best_reward = -np.inf
 num_steps = 0
-num_cpu = 6
+num_cpu = 1
 
 def callback(_locals, _globals):
     global best_reward, num_steps
@@ -41,35 +41,37 @@ def make(env_str, cpu):
 
 
 #SET UP ENVIRONMENT
-os.environ['DONKEY_SIM_PATH'] = "C:\\Users\\Anish Muthali\\Desktop\\SelfDriving\\DonkeySimWindows\\DonkeySim.exe"
+os.environ['DONKEY_SIM_PATH'] = f"../DonkeySimMac/donkey_sim.app/Contents/MacOS/donkey_sim"
 os.environ['DONKEY_SIM_PORT'] = str(9091)
 os.environ['DONKEY_SIM_HEADLESS'] = str(0) # "1" is headless
 os.environ['DONKEY_SIM_MULTI'] = str(1)
 
 timesteps = 100000 # Set this to a reasonable number
 model_name = "a2c_model" # Change the model name to your preferences
-training = True # Change this to test or use the model
+training = False # Change this to test or use the model
 os.makedirs("models/", exist_ok=True)
 for cpu in range(num_cpu):
     os.makedirs("models" + str(cpu) + "/", exist_ok=True)
 
-if __name__ == "__main__" and training:
-    #env = DummyVecEnv([lambda: env])
+if __name__ == "__main__":
+    #env = DummyVecEnv([make("donkey-generated-roads-v0", 0)])
     print("main")
-    env = SubprocVecEnv([make("donkey-warehouse-v0", i) for i in range(num_cpu)])
-    model = A2C(CnnLstmPolicy, env, verbose=1)
-    print("Training")
-    model.learn(timesteps, callback=callback)
-    obs=env.reset()
-    print("Testing")
-    for i in range(5000):
-        action, _states = model.predict(obs)
-        obs, rewards, done, info = env.step(action)
-        try:
-            env.render()
-        except Exception as e:
-            print(e)
-        if i % 50 == 0:
-            print("Saving model")
-            model.save(model_name)
-    model.save(model_name)
+    if training:
+        env = SubprocVecEnv([make("donkey-generated-roads-v0", i) for i in range(num_cpu)])
+        model = A2C(CnnLstmPolicy, env, verbose=1)
+        print("Training")
+        model.learn(timesteps, callback=callback)
+        print("Done! Saving...")
+        model.save(model_name)
+    else:
+        env = SubprocVecEnv([make("donkey-generated-roads-v0", i) for i in range(num_cpu)])
+        model = A2C.load("a2c_model.pkl")
+        obs=env.reset()
+        print("Testing")
+        for i in range(5000):
+            action, _states = model.predict(obs)
+            obs, rewards, done, info = env.step(action)
+            try:
+                env.render()
+            except Exception as e:
+                print(e)
