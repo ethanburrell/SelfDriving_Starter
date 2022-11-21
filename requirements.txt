@@ -2,7 +2,7 @@ git+https://github.com/tawnkramer/gym-donkeycar.git
 python-dotenv
 keras
 keras-rl2
-tensorflow==2.0.0-b1
+tensorflow==2.9.3
 
 # Image processing submodule:
 matplotlib
